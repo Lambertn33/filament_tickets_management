@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TicketResource\Pages;
 use App\Filament\Resources\TicketResource\RelationManagers;
+use App\Filament\Resources\TicketResource\RelationManagers\CategoriesRelationManager;
 use App\Models\Ticket;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -14,6 +15,9 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\TextInputColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -48,13 +52,30 @@ class TicketResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('title')
+                    ->description(fn (Ticket $record): string => $record->description),
+                BadgeColumn::make('priority')
+                    ->colors([
+                        'warning' => static fn ($state): bool => $state === self::$model::MEDIUMPRIORITY,
+                        'success' => static fn ($state): bool => $state === self::$model::HIGHPRIORITY,
+                        'danger' => static fn ($state): bool => $state === self::$model::LOWPRIORITY,
+                    ]),
+                BadgeColumn::make('status')
+                    ->colors([
+                        'warning' => static fn ($state): bool => $state === self::$model::ARCHIVEDSTATUS,
+                        'success' => static fn ($state): bool => $state === self::$model::OPENSTATUS,
+                        'danger' => static fn ($state): bool => $state === self::$model::CLOSEDSTATUS,
+                    ]),
+                TextColumn::make('assignedBy.name'),
+                TextColumn::make('assignedTo.name'),
+                TextInputColumn::make('comment'),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -64,7 +85,7 @@ class TicketResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CategoriesRelationManager::class
         ];
     }
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Ticket extends Model
 {
@@ -12,6 +13,14 @@ class Ticket extends Model
 
     const PRIORITY = ['Low', 'Medium', 'High'];
     const STATUS = ['Open', 'Closed', 'Archived'];
+
+    const LOWPRIORITY = self::PRIORITY[0];
+    const MEDIUMPRIORITY = self::PRIORITY[1];
+    const HIGHPRIORITY = self::PRIORITY[2];
+
+    const OPENSTATUS = self::STATUS[0];
+    const CLOSEDSTATUS = self::STATUS[1];
+    const ARCHIVEDSTATUS = self::STATUS[2];
 
     protected $fillable = [
         'id', 'title', 'description', 'priority', 'status', 'is_resolved', 'comment',
@@ -36,5 +45,15 @@ class Ticket extends Model
     public function assignedTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to', 'id');
+    }
+
+    /**
+     * The categories that belong to the Ticket
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function categories(): BelongsToMany
+    {
+        return $this->belongsToMany(Category::class, 'category_tickets', 'ticket_id', 'category_id');
     }
 }
