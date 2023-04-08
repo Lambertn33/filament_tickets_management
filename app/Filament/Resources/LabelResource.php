@@ -2,25 +2,24 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CategoryResource\Pages;
-use App\Filament\Resources\CategoryResource\RelationManagers;
-use App\Models\Category;
+use App\Filament\Resources\LabelResource\Pages;
+use App\Filament\Resources\LabelResource\RelationManagers;
+use App\Models\Label;
 use Filament\Forms;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Columns\CheckboxColumn;
 use Filament\Tables\Columns\TextColumn;
-use Illuminate\Support\Str;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CategoryResource extends Resource
+class LabelResource extends Resource
 {
-    protected static ?string $model = Category::class;
+    protected static ?string $model = Label::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
@@ -29,18 +28,11 @@ class CategoryResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label('Category name')
                     ->required()
-                    ->unique(ignoreRecord: true)
-                    ->reactive()
-                    ->afterStateUpdated(function($state, $set) {
-                        $set('slug', Str::slug($state));
-                    }),
-
-                TextInput::make('slug')
-                    ->label('Category Slug')
-                    ->required(),
-                Checkbox::make('is_active')
+                    ->label('Label name')
+                    ->unique(ignoreRecord: true),
+                Toggle::make('is_visible')
+                    ->label('Label visibility')
             ]);
     }
 
@@ -50,35 +42,34 @@ class CategoryResource extends Resource
             ->columns([
                 TextColumn::make('name')
                     ->sortable()
-                    ->label('Category Name'),
-                CheckboxColumn::make('is_active')
-                    ->label('Is Active')
+                    ->label('Label name'),
+                ToggleColumn::make('is_visible')
+                    ->label('Label Visibility')
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
-
+    
     public static function getRelations(): array
     {
         return [
             //
         ];
     }
-
+    
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCategories::route('/'),
-            'create' => Pages\CreateCategory::route('/create'),
-            'edit' => Pages\EditCategory::route('/{record}/edit'),
+            'index' => Pages\ListLabels::route('/'),
+            'create' => Pages\CreateLabel::route('/create'),
+            'edit' => Pages\EditLabel::route('/{record}/edit'),
         ];
-    }
+    }    
 }
