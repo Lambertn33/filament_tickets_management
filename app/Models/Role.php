@@ -10,6 +10,10 @@ class Role extends Model
 {
     use HasFactory;
 
+    const ROLES = ['ADMIN', 'AGENT'];
+    const ADMINROLE = self::ROLES[0];
+    const AGENTROLE = self::ROLES[1];
+
     protected $fillable = [
         'id', 'title'
     ];
