@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Label extends Model
 {
@@ -22,5 +23,10 @@ class Label extends Model
     public function tickets(): BelongsToMany
     {
         return $this->belongsToMany(Ticket::class, 'label_tickets', 'label_id', 'ticket_id');
+    }
+
+    public function scopeActive(Builder $query)
+    {
+        return $query->where('is_active', true);
     }
 }

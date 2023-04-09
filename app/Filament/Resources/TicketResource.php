@@ -7,6 +7,8 @@ use App\Filament\Resources\TicketResource\RelationManagers;
 use App\Filament\Resources\TicketResource\RelationManagers\CategoriesRelationManager;
 use App\Filament\Resources\TicketResource\RelationManagers\LabelsRelationManager;
 use App\Models\Ticket;
+use App\Models\User;
+use App\Models\Role;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Select;
@@ -45,7 +47,13 @@ class TicketResource extends Resource
                 Checkbox::make('is_resolved')
                     ->required(),
                 Select::make('assigned_to')
-                    ->relationship('assignedTo', 'name')
+                    ->options(User::whereHas('roles', function( Builder $query ) {
+                        $query->where('name', Role::AGENTROLE);
+                    })
+                        ->get()
+                        ->pluck('name', 'id')
+                        ->toArray()
+                    )
             ]);
     }
 
