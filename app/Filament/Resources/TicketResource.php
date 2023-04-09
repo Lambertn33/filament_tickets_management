@@ -21,6 +21,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\BadgeColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\TextInputColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -47,12 +48,13 @@ class TicketResource extends Resource
                 Checkbox::make('is_resolved')
                     ->required(),
                 Select::make('assigned_to')
-                    ->options(User::whereHas('roles', function( Builder $query ) {
-                        $query->where('name', Role::AGENTROLE);
-                    })
-                        ->get()
-                        ->pluck('name', 'id')
-                        ->toArray()
+                    ->options(
+                        User::whereHas('roles', function (Builder $query) {
+                            $query->where('title', Role::AGENTROLE);
+                        })
+                            ->get()
+                            ->pluck('name', 'id')
+                            ->toArray()
                     )
             ]);
     }
@@ -82,7 +84,11 @@ class TicketResource extends Resource
                     ->disabled(!auth()->user()->hasPermission('ticket_edit')),
             ])
             ->filters([
-                //
+                SelectFilter::make('status')
+                    ->options(self::$model::STATUS),
+                SelectFilter::make('priority')
+                    ->options(self::$model::PRIORITY)
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

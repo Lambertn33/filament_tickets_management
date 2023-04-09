@@ -65,4 +65,9 @@ class User extends Authenticatable
 
         return collect($permissionsArray)->unique()->contains($permission);
     }
+
+    public function hasRole(string $role)
+    {
+        return $this->roles->contains('title', $role);
+    }
 }

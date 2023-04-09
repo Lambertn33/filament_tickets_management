@@ -28,6 +28,11 @@ class UsersSeeder extends Seeder
                 'email' => 'agent@gmail.com',
                 'password' => Hash::make('agent12345')
             ),
+            2 => array(
+                'name' => 'agent 2',
+                'email' => 'agent2@gmail.com',
+                'password' => Hash::make('agent12345')
+            ),
         ));
     }
 }

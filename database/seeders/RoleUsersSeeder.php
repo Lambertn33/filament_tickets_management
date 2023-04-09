@@ -25,8 +25,12 @@ class RoleUsersSeeder extends Seeder
 
         $userAgent = User::where('email', 'agent@gmail.com')->first();
 
+        $userAgent2 = User::where('email', 'agent2@gmail.com')->first();
+
         $userAdmin->roles()->sync($adminRole);
 
         $userAgent->roles()->sync($agentRole);
+
+        $userAgent2->roles()->sync($agentRole);
     }
 }
