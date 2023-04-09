@@ -41,11 +41,11 @@ class Permission extends Model
         'permission_edit',
         'permission_delete',
 
-        'role_create',
-        'role_access',
-        'role_show',
-        'role_edit',
-        'role_delete',
+        'user_create',
+        'user_access',
+        'user_show',
+        'user_edit',
+        'user_delete',
     ];
 
     protected $fillable = [

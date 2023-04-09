@@ -53,6 +53,7 @@ class CategoryResource extends Resource
                     ->label('Category Name'),
                 CheckboxColumn::make('is_active')
                     ->label('Is Active')
+                    ->disabled(!auth()->user()->hasPermission('category_edit'))
             ])
             ->filters([
                 //

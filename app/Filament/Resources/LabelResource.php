@@ -45,6 +45,7 @@ class LabelResource extends Resource
                     ->label('Label name'),
                 ToggleColumn::make('is_visible')
                     ->label('Label Visibility')
+                    ->disabled(!auth()->user()->hasPermission('category_edit'))
             ])
             ->filters([
                 //

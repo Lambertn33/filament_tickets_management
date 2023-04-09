@@ -54,7 +54,8 @@ class TicketResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('title')
-                    ->description(fn (Ticket $record): string => $record->description),
+                    ->description(fn (Ticket $record): string => $record->description ? $record->description : '')
+                    ->searchable(),
                 BadgeColumn::make('priority')
                     ->colors([
                         'warning' => static fn ($state): bool => $state === self::$model::MEDIUMPRIORITY,
@@ -69,7 +70,8 @@ class TicketResource extends Resource
                     ]),
                 TextColumn::make('assignedBy.name'),
                 TextColumn::make('assignedTo.name'),
-                TextInputColumn::make('comment'),
+                TextInputColumn::make('comment')
+                    ->disabled(!auth()->user()->hasPermission('ticket_edit')),
             ])
             ->filters([
                 //

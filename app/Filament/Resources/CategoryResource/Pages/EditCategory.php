@@ -20,4 +20,19 @@ class EditCategory extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return 'Category created successfully';
+    }
+
+    protected function getSavedNotificationTitle(): ?string
+    {
+        return 'Category updated successfully';
+    }
+
+    protected function getDeletedNotificationTitle(): ?string
+    {
+        return 'Category Deleted successfully';
+    }
 }
