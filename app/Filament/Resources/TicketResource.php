@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\TicketResource\Pages;
 use App\Filament\Resources\TicketResource\RelationManagers;
 use App\Filament\Resources\TicketResource\RelationManagers\CategoriesRelationManager;
+use App\Filament\Resources\TicketResource\RelationManagers\LabelsRelationManager;
 use App\Models\Ticket;
 use Filament\Forms;
 use Filament\Forms\Components\Checkbox;
@@ -85,7 +86,8 @@ class TicketResource extends Resource
     public static function getRelations(): array
     {
         return [
-            CategoriesRelationManager::class
+            CategoriesRelationManager::class,
+            LabelsRelationManager::class
         ];
     }
 

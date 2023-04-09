@@ -56,4 +56,14 @@ class Ticket extends Model
     {
         return $this->belongsToMany(Category::class, 'category_tickets', 'ticket_id', 'category_id');
     }
+
+    /**
+     * The labels that belong to the Ticket
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class, 'label_tickets', 'ticket_id', 'label_id');
+    }
 }
